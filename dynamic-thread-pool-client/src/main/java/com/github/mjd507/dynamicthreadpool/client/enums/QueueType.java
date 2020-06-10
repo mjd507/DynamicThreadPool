@@ -1,6 +1,6 @@
 package com.github.mjd507.dynamicthreadpool.client.enums;
 
-public enum BlockingQueueTypeEnum {
+public enum QueueType {
 
     SYNCHRONOUSQUEUE("同步队列", "SynchronousQueue"),
     LINKEDBLOCKINGQUEUE("非同步队列", "LinkedBlockingQueue");
@@ -8,7 +8,7 @@ public enum BlockingQueueTypeEnum {
     private String name;
     private String type;
 
-    BlockingQueueTypeEnum(String name, String type) {
+    QueueType(String name, String type) {
         this.name = name;
         this.type = type;
     }

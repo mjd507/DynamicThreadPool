@@ -3,14 +3,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>threadpool</artifactId>
-    <groupId>com.threadpool</groupId>
+    <groupId>com.github.mjd507</groupId>
+    <artifactId>dynamic-thread-pool</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.mjd507</groupId>
   <artifactId>dynamic-thread-pool-client</artifactId>
 
 
+  <dependencies>
+    <dependency>
+      <groupId>com.github.mjd507</groupId>
+      <artifactId>JavaUtils</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.mjd507</groupId>
+      <artifactId>config-center-client</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 </project>

@@ -1,6 +1,5 @@
-package com.github.mjd507.dynamicthreadpool.client.executor;
+package com.github.mjd507.dynamicthreadpool.client;
 
-import com.github.mjd507.dynamicthreadpool.client.ThreadPoolInfo;
 import com.github.mjd507.dynamicthreadpool.client.config.ConfigGateway;
 import com.github.mjd507.dynamicthreadpool.client.config.ConfigListener;
 import com.github.mjd507.dynamicthreadpool.client.config.PoolConfig;
