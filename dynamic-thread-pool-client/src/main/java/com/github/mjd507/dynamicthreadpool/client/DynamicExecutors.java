@@ -105,7 +105,7 @@ public class DynamicExecutors {
         if (QueueType.SYNCHRONOUSQUEUE.getType().equals(config.getQueueType())) {
             return new SynchronousQueue<>();
         } else {
-            return new ResizeableCapacityLinkedBlockingQueue<>(config.getQueueSize());
+            return new ResizeableCapacityLinkedBlockingQueue<>(config.getQueueCapacity());
         }
     }
 

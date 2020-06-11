@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 所以线程池服务管理
+ * 所有线程池服务管理
  * 1. 将所以线程池以名字区分，存进 map 里
  * 2. 当某个线程池配置改变时，更新线程池配置
  * <p>
@@ -85,7 +85,7 @@ public class ExecutorServiceManager implements ConfigListener {
         threadPoolExecutor.setMaximumPoolSize(config.getMaxSize());
         BlockingQueue blockingQueue = threadPoolExecutor.getQueue();
         if (blockingQueue instanceof ResizeableCapacity) {
-            ((ResizeableCapacity) blockingQueue).setCapacity(config.getQueueSize());
+            ((ResizeableCapacity) blockingQueue).setCapacity(config.getQueueCapacity());
         }
     }
 

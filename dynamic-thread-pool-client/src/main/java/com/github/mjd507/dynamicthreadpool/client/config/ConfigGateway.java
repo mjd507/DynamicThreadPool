@@ -1,6 +1,7 @@
 package com.github.mjd507.dynamicthreadpool.client.config;
 
 import com.github.mjd507.configcenter.client.core.CuratorManager;
+import com.github.mjd507.dynamicthreadpool.client.EnvUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +37,7 @@ public class ConfigGateway {
 
     static {
         curatorManager = new CuratorManager();
-        // TODO: 每个应用需唯一，后续写个工具类，获取 AppName
-        curatorManager.setNameSpace("dynamic.thread.pool");
+        curatorManager.setNameSpace(EnvUtil.getAppName());
         curatorManager.setConnectString("localhost:2181");
         curatorManager.init();
     }

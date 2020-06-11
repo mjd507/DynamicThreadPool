@@ -13,61 +13,18 @@ import java.util.concurrent.ExecutorService;
 @Data
 public class ThreadPoolMetric {
 
-    /**
-     * 线程池名字
-     */
     private String poolName;
-    /**
-     * 核心线程数
-     */
-    private int corePoolSize;
-    /**
-     * 最大线程数
-     */
-    private int maximumPoolSize;
-    /**
-     * 当前线程池中的线程数
-     */
-    private int poolSize;
-    /**
-     * 当前正在执行任务的线程数(估计值)
-     */
+    private int coreSize;
+    private int maxSize;
+    private int currentSize;
     private int activeCount;
-    /**
-     * 队列类型
-     */
     private String queueType;
-    /**
-     * 队列容量
-     */
     private int queueCapacity;
-    /**
-     * 当前队列任务数
-     */
-    private int queueSize;
-    /**
-     * 剩余队列大小
-     */
+    private int queueCurrentSize;
     private int queueRemainingCapacity;
-
-    /**
-     * 已经处理任务数
-     */
     private long completedTaskCount;
-
-    /**
-     * 最大poolSize
-     */
     private int largestPoolSize;
-
-    /**
-     * 线程拒绝执行次数
-     */
     private int rejectCount;
-
-    /**
-     * 机器IP地址
-     */
     private String ipAddress;
 
     public static ThreadPoolMetric build(String poolName, ExecutorService executorService) {
@@ -77,15 +34,12 @@ public class ThreadPoolMetric {
         DynamicThreadPoolExecutor dynamicThreadPoolExecutor = (DynamicThreadPoolExecutor) executorService;
         ThreadPoolMetric threadPoolMetric = new ThreadPoolMetric();
         threadPoolMetric.setPoolName(poolName);
-        threadPoolMetric.setCorePoolSize(dynamicThreadPoolExecutor.getCorePoolSize());
-        threadPoolMetric.setMaximumPoolSize(dynamicThreadPoolExecutor.getMaximumPoolSize());
-        threadPoolMetric.setPoolSize(dynamicThreadPoolExecutor.getPoolSize());
+        threadPoolMetric.setCoreSize(dynamicThreadPoolExecutor.getCorePoolSize());
+        threadPoolMetric.setMaxSize(dynamicThreadPoolExecutor.getMaximumPoolSize());
+        threadPoolMetric.setCurrentSize(dynamicThreadPoolExecutor.getPoolSize());
         threadPoolMetric.setActiveCount(dynamicThreadPoolExecutor.getActiveCount());
         threadPoolMetric.setRejectCount(ThreadPoolRejectMetricManager.getAndReset(poolName));
-
-        String ipAddress = HostUtil.getHostIp();
-
-        threadPoolMetric.setIpAddress(ipAddress);
+        threadPoolMetric.setIpAddress(HostUtil.getHostIp());
         setQueueInfo(threadPoolMetric, dynamicThreadPoolExecutor);
 
         threadPoolMetric.setCompletedTaskCount(dynamicThreadPoolExecutor.getCompletedTaskCount());
@@ -94,10 +48,10 @@ public class ThreadPoolMetric {
     }
 
     private static void setQueueInfo(ThreadPoolMetric threadPoolMetric, DynamicThreadPoolExecutor dynamicThreadPoolExecutor) {
-        BlockingQueue blockingQueue = dynamicThreadPoolExecutor.getQueue();
+        BlockingQueue<Runnable> blockingQueue = dynamicThreadPoolExecutor.getQueue();
         threadPoolMetric.setQueueType(blockingQueue.getClass().getSimpleName());
         threadPoolMetric.setQueueRemainingCapacity(blockingQueue.remainingCapacity());
-        threadPoolMetric.setQueueSize(blockingQueue.size());
+        threadPoolMetric.setQueueCurrentSize(blockingQueue.size());
         threadPoolMetric.setQueueCapacity(blockingQueue.size() + blockingQueue.remainingCapacity());
     }
 }

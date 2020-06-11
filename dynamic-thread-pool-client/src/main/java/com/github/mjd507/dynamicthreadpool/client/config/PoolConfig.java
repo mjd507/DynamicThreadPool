@@ -13,7 +13,7 @@ public class PoolConfig {
     private int coreSize;
     private int maxSize;
     private String queueType;
-    private int queueSize;
+    private int queueCapacity; // 队列容量 (当前容量 + 剩余容量)
     private WarnRules warnRules;
 
     /**
@@ -31,11 +31,11 @@ public class PoolConfig {
         poolConfig.setCoreSize(3);
         poolConfig.setMaxSize(5);
         poolConfig.setQueueType(QueueType.LINKEDBLOCKINGQUEUE.getType());
-        poolConfig.setQueueSize(100);
+        poolConfig.setQueueCapacity(100);
         WarnRules warnRules = new WarnRules();
         warnRules.setActive(true);
         warnRules.setActiveCountThreshold(80);
-        warnRules.setQueueSizeThreshold(100);
+        warnRules.setQueueSizeThreshold(80);
         poolConfig.setWarnRules(warnRules);
         return poolConfig;
     }
