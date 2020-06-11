@@ -20,7 +20,7 @@ public class PoolConfig {
      * 告警规则
      */
     @Data
-    private static class WarnRules {
+    public static class WarnRules {
         private long queueSizeThreshold;
         private int activeCountThreshold;
         private boolean isActive;

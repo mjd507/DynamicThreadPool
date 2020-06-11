@@ -28,21 +28,22 @@ public class ConfigGateway {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigGateway.class);
 
-    private static final CuratorManager configManager;
+    private static final CuratorManager curatorManager;
 
     private static final Set<String> configKeys = new HashSet<>();
 
     private static final Set<ConfigListener> configListeners = new HashSet<>();
 
     static {
-        configManager = new CuratorManager();
-        configManager.setNameSpace("thread.pool");
-        configManager.setConnectString("localhost:2181");
-        configManager.init();
+        curatorManager = new CuratorManager();
+        // TODO: 每个应用需唯一，后续写个工具类，获取 AppName
+        curatorManager.setNameSpace("dynamic.thread.pool");
+        curatorManager.setConnectString("localhost:2181");
+        curatorManager.init();
     }
 
     static {
-        configManager.setGlobalChangeListener((poolName, newVal) -> {
+        curatorManager.setGlobalChangeListener((poolName, newVal) -> {
             if (!configKeys.contains(poolName)) {
                 return;
             }
@@ -65,7 +66,7 @@ public class ConfigGateway {
         if (StringUtils.isBlank(poolName)) {
             throw new IllegalArgumentException(String.format("线程池名非法, poolName: %s", poolName));
         }
-        String configJson = configManager.get(poolName);
+        String configJson = curatorManager.get(poolName);
         if (StringUtils.isBlank(configJson)) {
             return null;
         }

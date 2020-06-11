@@ -3,6 +3,7 @@ package com.github.mjd507.dynamicthreadpool.client;
 import com.github.mjd507.dynamicthreadpool.client.config.ConfigGateway;
 import com.github.mjd507.dynamicthreadpool.client.config.ConfigListener;
 import com.github.mjd507.dynamicthreadpool.client.config.PoolConfig;
+import com.github.mjd507.dynamicthreadpool.client.notify.ThreadPoolMonitor;
 import com.github.mjd507.dynamicthreadpool.client.queue.ResizeableCapacity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class ExecutorServiceManager implements ConfigListener {
 
     private ExecutorServiceManager() {
         ConfigGateway.getInstance().registerListener(this);
+        Thread monitorThread = new Thread(new ThreadPoolMonitor());
+        monitorThread.setDaemon(true);
+        monitorThread.start();
     }
 
     private static final ExecutorServiceManager instance = new ExecutorServiceManager();
@@ -36,6 +40,10 @@ public class ExecutorServiceManager implements ConfigListener {
     }
 
     private final Map<String, ExecutorService> executorServiceMap = new ConcurrentHashMap<>();
+
+    public Map<String, ExecutorService> getExecutorServiceMap() {
+        return executorServiceMap;
+    }
 
     public void registerExecutorService(String name, ExecutorService executorService) {
         executorServiceMap.put(name, executorService);
