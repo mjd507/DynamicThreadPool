@@ -1,7 +1,7 @@
 package com.github.mjd507.dynamicthreadpool.client.config;
 
 import com.github.mjd507.configcenter.client.core.CuratorManager;
-import com.github.mjd507.dynamicthreadpool.client.EnvUtil;
+import com.github.mjd507.util.util.ResourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class ConfigGateway {
 
     static {
         curatorManager = new CuratorManager();
-        curatorManager.setNameSpace(EnvUtil.getAppName());
+        curatorManager.setNameSpace(ResourceUtil.getAppName());
         curatorManager.setConnectString("localhost:2181");
         curatorManager.init();
     }

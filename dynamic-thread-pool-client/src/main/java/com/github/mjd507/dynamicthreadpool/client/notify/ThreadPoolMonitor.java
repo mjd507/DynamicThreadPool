@@ -1,12 +1,13 @@
 package com.github.mjd507.dynamicthreadpool.client.notify;
 
 import com.github.mjd507.dynamicthreadpool.client.DynamicThreadPoolExecutor;
-import com.github.mjd507.dynamicthreadpool.client.EnvUtil;
 import com.github.mjd507.dynamicthreadpool.client.ExecutorServiceManager;
 import com.github.mjd507.dynamicthreadpool.client.config.ConfigGateway;
 import com.github.mjd507.dynamicthreadpool.client.config.PoolConfig;
 import com.github.mjd507.dynamicthreadpool.client.metric.ThreadPoolMetric;
+import com.github.mjd507.util.util.HostUtil;
 import com.github.mjd507.util.util.MapUtil;
+import com.github.mjd507.util.util.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,8 +72,8 @@ public class ThreadPoolMonitor implements Runnable {
         boolean needWarn = false;
         StringBuilder warnMsg = new StringBuilder();
         warnMsg.append(">>>>>>> 线程池监控报警 <<<<<<<< \n");
-        warnMsg.append(String.format("[应用名: %s] \n", EnvUtil.getAppName()));
-        warnMsg.append(String.format("[机器IP: %s] \n", EnvUtil.getAppName()));
+        warnMsg.append(String.format("[应用名: %s] \n", ResourceUtil.getAppName()));
+        warnMsg.append(String.format("[机器IP: %s] \n", HostUtil.getHostIp()));
         warnMsg.append("[告警原因]\n");
         PoolConfig.WarnRules defaultRules = PoolConfig.defaultConfig().getWarnRules();
         float activeCountRateThreshold = defaultRules.getActiveCountThreshold() / 100f;

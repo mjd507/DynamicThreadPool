@@ -16,7 +16,7 @@
     <dependency>
       <groupId>com.github.mjd507</groupId>
       <artifactId>JavaUtils</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.github.mjd507</groupId>

@@ -18,8 +18,6 @@
   <modules>
     <module>dynamic-thread-pool-admin</module>
     <module>dynamic-thread-pool-client</module>
-    <!--    <module>spring-boot-starter-config-center</module>-->
-<!--    <module>config-center-admin</module>-->
   </modules>
 
   <dependencyManagement>

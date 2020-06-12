@@ -1,1 +1,39 @@
+server:
+  port: 11111
 
+spring:
+  application:
+    name: com.app.admin
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/config_center?serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+    hikari:
+      connection-init-sql: SET NAMES 'utf8mb4'
+    # 默认数据源类型
+    type: com.zaxxer.hikari.HikariDataSource
+
+  redis:
+    database: 0
+    port: 6379
+    host: localhost
+    lettuce:
+      # 配置 pool 需要在 pom 文件引入 commons-pool2 依赖
+      pool:
+        max-active: 8
+        max-wait: 2ms
+        min-idle: 1
+        max-idle: 8
+
+logging:
+  level:
+    org.springframework.web: trace
+
+#mybatis:
+#  mapper-locations: classpath*:mapper/*.xml
+#  config-location: classpath:mybatis.xml
+
+configcenter:
+  connect-string: localhost:2181
+  is-admin: true
