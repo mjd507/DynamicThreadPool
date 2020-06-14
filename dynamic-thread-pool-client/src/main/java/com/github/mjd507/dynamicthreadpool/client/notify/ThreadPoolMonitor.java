@@ -71,6 +71,7 @@ public class ThreadPoolMonitor implements Runnable {
         }
         boolean needWarn = false;
         StringBuilder warnMsg = new StringBuilder();
+        warnMsg.append("\n");
         warnMsg.append(">>>>>>> 线程池监控报警 <<<<<<<< \n");
         warnMsg.append(String.format("[应用名: %s] \n", ResourceUtil.getAppName()));
         warnMsg.append(String.format("[机器IP: %s] \n", HostUtil.getHostIp()));
@@ -109,21 +110,21 @@ public class ThreadPoolMonitor implements Runnable {
         }
         if (needWarn) {
             warnMsg.append("[线程池参数]\n");
-            warnMsg.append(String.format("poolName:%s", threadPoolMetric.getPoolName()));
-            warnMsg.append(String.format("corePoolSize:%s", threadPoolMetric.getCoreSize()));
-            warnMsg.append(String.format("maximumPoolSize:%s", threadPoolMetric.getMaxSize()));
-            warnMsg.append(String.format("poolSize:%s", threadPoolMetric.getCurrentSize()));
-            warnMsg.append(String.format("activeCount:%s", threadPoolMetric.getActiveCount()));
-            warnMsg.append(String.format("queueType:%s", threadPoolMetric.getQueueType()));
-            warnMsg.append(String.format("queueCapacity:%s", threadPoolMetric.getQueueCapacity()));
-            warnMsg.append(String.format("queueSize:%s", threadPoolMetric.getQueueCurrentSize()));
-            warnMsg.append(String.format("queueRemainingCapacity:%s", threadPoolMetric.getQueueRemainingCapacity()));
-            warnMsg.append(String.format("completedTaskCount:%s", threadPoolMetric.getCompletedTaskCount()));
-            warnMsg.append(String.format("largestPoolSize:%s", threadPoolMetric.getLargestPoolSize()));
-            warnMsg.append(String.format("rejectCount:%s", threadPoolMetric.getRejectCount()));
-            warnMsg.append(String.format("ipAddress:%s", threadPoolMetric.getIpAddress()));
-            warnMsg.append(String.format("[线程池配置链接]:%s", "http://localhost"));
-            warnMsg.append("[告警时间间隔] 5分钟");
+            warnMsg.append(String.format("poolName:%s", threadPoolMetric.getPoolName())).append("\n");
+            warnMsg.append(String.format("corePoolSize:%s", threadPoolMetric.getCoreSize())).append("\n");
+            warnMsg.append(String.format("maximumPoolSize:%s", threadPoolMetric.getMaxSize())).append("\n");
+            warnMsg.append(String.format("poolSize:%s", threadPoolMetric.getCurrentSize())).append("\n");
+            warnMsg.append(String.format("activeCount:%s", threadPoolMetric.getActiveCount())).append("\n");
+            warnMsg.append(String.format("queueType:%s", threadPoolMetric.getQueueType())).append("\n");
+            warnMsg.append(String.format("queueCapacity:%s", threadPoolMetric.getQueueCapacity())).append("\n");
+            warnMsg.append(String.format("queueSize:%s", threadPoolMetric.getQueueCurrentSize())).append("\n");
+            warnMsg.append(String.format("queueRemainingCapacity:%s", threadPoolMetric.getQueueRemainingCapacity())).append("\n");
+            warnMsg.append(String.format("completedTaskCount:%s", threadPoolMetric.getCompletedTaskCount())).append("\n");
+            warnMsg.append(String.format("largestPoolSize:%s", threadPoolMetric.getLargestPoolSize())).append("\n");
+            warnMsg.append(String.format("rejectCount:%s", threadPoolMetric.getRejectCount())).append("\n");
+            warnMsg.append(String.format("ipAddress:%s", threadPoolMetric.getIpAddress())).append("\n");
+            warnMsg.append(String.format("[线程池配置链接]:%s", "http://localhost")).append("\n");
+            warnMsg.append("[告警时间间隔] 5分钟").append("\n");
             mapUtil.put("needWarn", true);
             mapUtil.put("warnMsg", warnMsg.toString());
         }

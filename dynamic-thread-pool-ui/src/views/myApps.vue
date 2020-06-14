@@ -24,13 +24,13 @@
         highlight-current-row
         style="width: 100%"
       >
-        <el-table-column align="center" label="配置key" width="180">
+        <el-table-column align="center" label="线程池名称" width="180">
           <template slot-scope="{row}">
-            <span>{{ row.key }}</span>
+            <span>{{ row.poolName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column min-width="300px" label="配置value">
+        <el-table-column min-width="300px" label="json配置">
           <template slot-scope="{row}">
             <template v-if="row.edit">
               <el-input v-model="row.value" class="edit-input" size="small" />
@@ -68,7 +68,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog title="新增配置" center :visible.sync="showAddCfgPanel">
+    <el-dialog title="新增线程池" center :visible.sync="showAddCfgPanel">
       <el-form
         :model="ruleForm"
         status-icon
@@ -77,11 +77,38 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="key" prop="key">
-          <el-input type="textarea" v-model="ruleForm.key"></el-input>
+        <el-form-item label="线程池名字" prop="poolName">
+          <el-input type="text" v-model="ruleForm.poolName"></el-input>
         </el-form-item>
-        <el-form-item label="val" prop="val">
-          <el-input type="textarea" :autosize="{ minRows: 6}" v-model="ruleForm.val"></el-input>
+        <el-form-item label="核心池大小" prop="coreSize">
+          <el-input type="number" v-model="ruleForm.coreSize"></el-input>
+        </el-form-item>
+        <el-form-item label="最大池大小" prop="maxSize">
+          <el-input type="number" v-model="ruleForm.maxSize"></el-input>
+        </el-form-item>
+        <el-form-item label="队列类型" prop="queueType">
+          <el-select v-model="ruleForm.queueType" placeholder="选择队列类型" size="medium">
+            <el-option
+              v-for="item in ['LinkedBlockingQueue','SynchronousQueue']"
+              :key="item"
+              :label="item"
+              :value="item"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <div v-if="ruleForm.queueType === 'LinkedBlockingQueue' ">
+          <el-form-item label="队列容量" prop="queueCapacity">
+            <el-input type="number" v-model="ruleForm.queueCapacity"></el-input>
+          </el-form-item>
+          <el-form-item label="队列容量阈值" prop="queueSizeThreshold">
+            <el-input type="number" v-model="ruleForm.queueSizeThreshold"></el-input>
+          </el-form-item>
+        </div>
+        <el-form-item label="活跃线程阈值" prop="activeCountThreshold">
+          <el-input type="number" v-model="ruleForm.activeCountThreshold"></el-input>
+        </el-form-item>
+        <el-form-item label="是否报警" prop="isActive">
+          <el-switch v-model="ruleForm.isActive" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -106,12 +133,40 @@ export default {
       listLoading: true,
       showAddCfgPanel: false,
       ruleForm: {
-        key: "",
-        val: ""
+        poolName: "",
+        coreSize: "3",
+        maxSize: "5",
+        queueType: "LinkedBlockingQueue",
+        queueCapacity: "",
+        queueSizeThreshold: "",
+        activeCountThreshold: "80",
+        isActive: true
       },
       rules: {
-        key: [{ required: true, message: "请输入配置key", trigger: "blur" }],
-        val: [{ required: true, message: "请输入配置value", trigger: "blur" }]
+        poolName: [
+          { required: true, message: "请输入线程池名称", trigger: "blur" }
+        ],
+        coreSize: [
+          { required: true, message: "请输入配置核心池大小", trigger: "blur" }
+        ],
+        maxSize: [
+          { required: true, message: "请输入配置最大池大小", trigger: "blur" }
+        ],
+        queueType: [
+          { required: true, message: "请输入选择队列类型", trigger: "blur" }
+        ],
+        queueCapacity: [
+          { required: true, message: "请输入选择队列容量", trigger: "blur" }
+        ],
+        queueSizeThreshold: [
+          { required: true, message: "请输入选择队列报警阈值", trigger: "blur" }
+        ],
+        activeCountThreshold: [
+          { required: true, message: "请输入活跃线程阈值", trigger: "blur" }
+        ],
+        isActive: [
+          { required: true, message: "请选择是否告警", trigger: "blur" }
+        ]
       }
     };
   },
@@ -131,11 +186,11 @@ export default {
       this.listLoading = true;
       const { data } = await listConfig({ appId: this.currAppId });
       const cfgs = [];
-      for (let key in data) {
+      for (let poolName in data) {
         cfgs.push({
-          key,
-          value: data[key],
-          originValue: data[key],
+          poolName,
+          value: data[poolName],
+          originValue: data[poolName],
           edit: false
         });
         // originValue will be used when user click the cancel
@@ -163,12 +218,21 @@ export default {
     },
     confirmEdit(row) {
       row.edit = false;
-      const cfg = {
-        appId: this.currAppId,
-        key: row.key,
-        val: row.value,
-        isAdd: false
+      const zkVal = JSON.parse(row.value);
+      const newVal = {
+        poolName: row.poolName,
+        coreSize: zkVal.coreSize,
+        maxSize: zkVal.maxSize,
+        queueType: zkVal.queueType,
+        queueCapacity: zkVal.queueCapacity,
+        queueSizeThreshold: zkVal.warnRules.queueSizeThreshold,
+        activeCountThreshold: zkVal.warnRules.activeCountThreshold,
+        isActive: zkVal.warnRules.isActive
       };
+      const cfg = Object.assign(newVal, {
+        appId: this.currAppId,
+        isAdd: false
+      });
       this._writeCfg(cfg).then(res => {
         const { data } = res;
         if (data === true) {
@@ -183,7 +247,7 @@ export default {
     deleteRow(row) {
       const req = {
         appId: this.currAppId,
-        key: row.key
+        key: row.poolName
       };
       deleteConfig(req).then(res => {
         const { data } = res;
@@ -206,12 +270,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          const req = {
+          const req = Object.assign(this.ruleForm, {
             appId: this.currAppId,
-            key: this.ruleForm.key,
-            val: this.ruleForm.val,
             isAdd: true
-          };
+          });
           this._writeCfg(req).then(res => {
             const { data } = res;
             if (data === true) {

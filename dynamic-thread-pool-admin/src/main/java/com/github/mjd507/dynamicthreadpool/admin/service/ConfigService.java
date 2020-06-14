@@ -81,8 +81,8 @@ public class ConfigService {
         if (configReq.getCoreSize() == null) return false;
         if (configReq.getMaxSize() == null) return false;
         if (configReq.getQueueType() == null) return false;
-        if (!configReq.getQueueType().equals(QueueType.LINKEDBLOCKINGQUEUE.getType()) ||
-                !configReq.getQueueType().equals(QueueType.SYNCHRONOUSQUEUE.getType()))
+        if (!(configReq.getQueueType().equals(QueueType.LINKEDBLOCKINGQUEUE.getType()) ||
+                configReq.getQueueType().equals(QueueType.SYNCHRONOUSQUEUE.getType())))
             return false;
         if (configReq.getQueueCapacity() == null) return false;
         if (configReq.getIsActive() == null) return false;

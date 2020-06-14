@@ -75,6 +75,10 @@ public class ExecutorServiceManager implements ConfigListener {
 
     @Override
     public void changed(String poolName, PoolConfig config) {
+        if (config == null) {
+            executorServiceMap.remove(poolName);
+            return;
+        }
         LOGGER.info(String.format("线程池配置变更, 线程池名: %s, 线程池配置: %s", poolName, PoolConfig.encode(config)));
         ExecutorService executorService = executorServiceMap.get(poolName);
         if (!(executorService instanceof ThreadPoolExecutor)) {

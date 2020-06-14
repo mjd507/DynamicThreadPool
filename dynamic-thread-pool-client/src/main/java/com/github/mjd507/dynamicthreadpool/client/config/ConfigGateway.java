@@ -49,9 +49,9 @@ public class ConfigGateway {
             }
             LOGGER.info(String.format("全局监听到线程池配置变更, 线程池名: %s, 新值: %s", poolName, newVal));
             PoolConfig poolConfig = PoolConfig.decode((String) newVal);
-            if (poolConfig == null) {
-                throw new RuntimeException(String.format("线程池配置获取失败, 线程池名: %s", poolName));
-            }
+//            if (poolConfig == null) {
+//                throw new RuntimeException(String.format("线程池配置获取失败, 线程池名: %s", poolName));
+//            }
             for (ConfigListener configListener : configListeners) {
                 configListener.changed(poolName, poolConfig);
             }
